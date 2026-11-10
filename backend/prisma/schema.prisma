@@ -39,3 +39,10 @@ model tarifas {
   precio      Int
   condicion   String @db.VarChar(100)
 }
+model pagos {
+  id          Int    @id @default(autoincrement())
+  cliente     String @db.VarChar(100)
+  transmision String @db.VarChar(150)
+  total       Int
+  montoPagado Int    @default(0)
+}
