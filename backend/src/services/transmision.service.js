@@ -1,8 +1,4 @@
-import { Between } from "typeorm";
-import { AppDataSource } from "../config/configDb.js";
-import { Transmision } from "../entities/transmision.entity.js";
-
-const repo = () => AppDataSource.getRepository(Transmision);
+import { prisma } from "../prisma.js";
 
 const HORA_APERTURA = 8;  // 08:00
 const HORA_CIERRE = 22;   // 22:00
@@ -10,11 +6,24 @@ const pad = (n) => String(n).padStart(2, "0");
 const FECHA_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 const HORA_REGEX = /^([01]\d|2[0-3]):[0-5]\d$/;
 
+// Convierte "YYYY-MM-DD" a Date (en UTC) y valida que exista
+const aFecha = (iso) => {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) throw new Error("Fecha inválida");
+  return d;
+};
+
+// Prisma devuelve `fecha` como Date; el frontend espera "YYYY-MM-DD"
+const formatear = (t) => ({ ...t, fecha: t.fecha.toISOString().slice(0, 10) });
+
 /* ---------- REQUISITO 1: disponibilidad de horarios ---------- */
 export const getDisponibilidadService = async (fecha) => {
   if (!FECHA_REGEX.test(fecha)) throw new Error("Fecha inválida (use YYYY-MM-DD)");
 
-  const reservas = await repo().find({ where: { fecha }, order: { horaInicio: "ASC" } });
+  const reservas = await prisma.transmisiones.findMany({
+    where: { fecha: aFecha(fecha) },
+    orderBy: { horaInicio: "asc" },
+  });
 
   const slots = [];
   for (let h = HORA_APERTURA; h < HORA_CIERRE; h++) {
@@ -49,18 +58,23 @@ export const createTransmisionService = async ({ tema, fecha, horaInicio, horaFi
     throw new Error("No se puede programar una transmisión en el pasado");
   }
 
+  const fechaDate = aFecha(fecha);
+
   // Validación en servidor: evita conflictos aunque el frontend se salte.
-  const conflicto = await repo()
-    .createQueryBuilder("t")
-    .where("t.fecha = :fecha", { fecha })
-    .andWhere("t.horaInicio < :horaFin", { horaFin })
-    .andWhere("t.horaFin > :horaInicio", { horaInicio })
-    .getOne();
+  const conflicto = await prisma.transmisiones.findFirst({
+    where: {
+      fecha: fechaDate,
+      horaInicio: { lt: horaFin },
+      horaFin: { gt: horaInicio },
+    },
+  });
 
   if (conflicto) throw new Error("El horario seleccionado ya está reservado");
 
-  const nueva = repo().create({ tema: String(tema).trim(), fecha, horaInicio, horaFin });
-  return await repo().save(nueva);
+  const nueva = await prisma.transmisiones.create({
+    data: { tema: String(tema).trim(), fecha: fechaDate, horaInicio, horaFin },
+  });
+  return formatear(nueva);
 };
 
 /* ---------- REQUISITO 2: transmisiones de un mes ---------- */
@@ -72,11 +86,12 @@ export const getTransmisionesPorMesService = async (anio, mes) => {
   }
 
   const ultimoDia = new Date(anio, mes, 0).getDate();
-  const desde = `${anio}-${pad(mes)}-01`;
-  const hasta = `${anio}-${pad(mes)}-${pad(ultimoDia)}`;
+  const desde = aFecha(`${anio}-${pad(mes)}-01`);
+  const hasta = aFecha(`${anio}-${pad(mes)}-${pad(ultimoDia)}`);
 
-  return await repo().find({
-    where: { fecha: Between(desde, hasta) },     // solo el mes elegido
-    order: { fecha: "ASC", horaInicio: "ASC" },  // orden cronológico
+  const lista = await prisma.transmisiones.findMany({
+    where: { fecha: { gte: desde, lte: hasta } },          // solo el mes elegido
+    orderBy: [{ fecha: "asc" }, { horaInicio: "asc" }],    // orden cronológico
   });
+  return lista.map(formatear);
 };
