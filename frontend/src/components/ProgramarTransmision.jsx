@@ -1,31 +1,42 @@
 import { useEffect, useState } from "react";
 import { getDisponibilidad, crearTransmision } from "../services/transmision.service.js";
-import { SelectorFecha } from "./SelectoresFecha.jsx";
+import Calendario from "./Calendario.jsx";
 
-const hoy = () => new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD en hora local
+const formatearFecha = (iso) => {
+  const [a, m, d] = iso.split("-").map(Number);
+  return new Date(a, m - 1, d).toLocaleDateString("es-CL", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+};
 
-export default function ProgramarTransmision({ onCreated }) {
-  const [fecha, setFecha] = useState(hoy());
+/* REQUISITO 1: elegir el día en el calendario y reservar un horario libre */
+export default function ProgramarTransmision({ fechaInicial }) {
+  const [fecha, setFecha] = useState(fechaInicial); // día elegido (o null)
   const [slots, setSlots] = useState([]);
   const [seleccion, setSeleccion] = useState(null);
   const [tema, setTema] = useState("");
   const [mensaje, setMensaje] = useState(null); // { tipo: "ok" | "error", texto }
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const cargar = async () => {
+    if (!fecha) return;
     try {
       setSlots(await getDisponibilidad(fecha));
     } catch (e) {
+      setSlots([]);
       setMensaje({ tipo: "error", texto: e.message });
     }
   };
 
   useEffect(() => {
-    if (!fecha) return;
     setSeleccion(null);
+    setSlots([]);
     cargar();
   }, [fecha]);
 
-  // Bloquea horas que ya pasaron si la fecha es hoy
+  // Bloquea horas que ya pasaron si el día elegido es hoy
   const esPasado = (slot) => new Date(`${fecha}T${slot.horaInicio}:00`) < new Date();
 
   const handleSubmit = async (e) => {
@@ -43,8 +54,8 @@ export default function ProgramarTransmision({ onCreated }) {
       setMensaje({ tipo: "ok", texto: "Transmisión programada con éxito." });
       setTema("");
       setSeleccion(null);
+      setRefreshKey((k) => k + 1); // el calendario muestra la nueva transmisión
       await cargar();
-      onCreated?.();
     } catch (err) {
       setMensaje({ tipo: "error", texto: err.message });
       cargar(); // por si otra persona tomó el horario
@@ -52,71 +63,79 @@ export default function ProgramarTransmision({ onCreated }) {
   };
 
   return (
-    <section className="panel">
-      <h2>Programar transmisión</h2>
-      <p className="muted">Elige un día y selecciona un bloque libre.</p>
+    <>
+      <header className="vista-encabezado">
+        <h1>Programar transmisión</h1>
+      </header>
 
-      <div className="field">
-        <span className="label-text">Fecha</span>
-        <SelectorFecha
-          value={fecha}
-          min={hoy()}
-          onChange={(f) => {
-            setFecha(f);
-            setMensaje(null);
-          }}
-        />
-      </div>
+      <Calendario
+        seleccionado={fecha}
+        refreshKey={refreshKey}
+        onElegirDia={(f) => {
+          setFecha(f);
+          setMensaje(null);
+        }}
+      />
 
-      <div className="slot-legend">
-        <span className="slot-dot libre" /> Libre
-        <span className="slot-dot ocupado" /> Reservado
-        <span className="slot-dot elegido" /> Seleccionado
-      </div>
+      {fecha ? (
+        <section className="horarios">
+          <h2 className="subtitulo">
+            Horarios del <span className="cap">{formatearFecha(fecha)}</span>
+          </h2>
 
-      <div className="slot-grid">
-        {slots.map((s) => {
-          const bloqueado = !s.disponible || esPasado(s);
-          const elegido = seleccion?.horaInicio === s.horaInicio;
-          return (
-            <button
-              key={s.horaInicio}
-              type="button"
-              disabled={bloqueado}
-              className={`slot ${!s.disponible ? "ocupado" : ""} ${elegido ? "elegido" : ""}`}
-              onClick={() => setSeleccion(s)}
-              title={s.tema || ""}
-            >
-              <strong>{s.horaInicio} - {s.horaFin}</strong>
-              <small>{!s.disponible ? s.tema : esPasado(s) ? "Ya pasó" : "Disponible"}</small>
+          <div className="slot-legend">
+            <span className="slot-dot libre" /> Libre
+            <span className="slot-dot ocupado" /> Reservado
+            <span className="slot-dot elegido" /> Seleccionado
+          </div>
+
+          <div className="slot-grid">
+            {slots.map((s) => {
+              const bloqueado = !s.disponible || esPasado(s);
+              const elegido = seleccion?.horaInicio === s.horaInicio;
+              return (
+                <button
+                  key={s.horaInicio}
+                  type="button"
+                  disabled={bloqueado}
+                  className={`slot ${!s.disponible ? "ocupado" : ""} ${elegido ? "elegido" : ""}`}
+                  onClick={() => setSeleccion(s)}
+                  title={s.tema || ""}
+                >
+                  <strong>{s.horaInicio} - {s.horaFin}</strong>
+                  <small>{!s.disponible ? s.tema : esPasado(s) ? "Ya pasó" : "Disponible"}</small>
+                </button>
+              );
+            })}
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className="field">
+              <label htmlFor="tema-tx">Tema de la transmisión</label>
+              <input
+                id="tema-tx"
+                type="text"
+                value={tema}
+                required
+                maxLength={150}
+                onChange={(e) => setTema(e.target.value)}
+                placeholder="Ej. Misa dominical"
+              />
+            </div>
+            <button className="btn-primary" type="submit">
+              {seleccion ? `Reservar ${seleccion.horaInicio} - ${seleccion.horaFin}` : "Reservar horario"}
             </button>
-          );
-        })}
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        <div className="field">
-          <label htmlFor="tema-tx">Tema de la transmisión</label>
-          <input
-            id="tema-tx"
-            type="text"
-            value={tema}
-            required
-            maxLength={150}
-            onChange={(e) => setTema(e.target.value)}
-            placeholder="Ej. Misa dominical"
-          />
-        </div>
-        <button className="btn-primary" type="submit">
-          {seleccion ? `Reservar ${seleccion.horaInicio} - ${seleccion.horaFin}` : "Reservar horario"}
-        </button>
-      </form>
+          </form>
+        </section>
+      ) : (
+        <p className="ayuda">Selecciona un día del calendario para ver los horarios disponibles.</p>
+      )}
 
       {mensaje && (
         <p role="status" className={mensaje.tipo === "ok" ? "msg-ok" : "msg-error"}>
           {mensaje.texto}
         </p>
       )}
-    </section>
+    </>
   );
 }

@@ -1,16 +1,34 @@
 import { useState } from "react";
+import Sidebar from "./components/Sidebar.jsx";
+import Calendario from "./components/Calendario.jsx";
 import ProgramarTransmision from "./components/ProgramarTransmision.jsx";
-import TransmisionesPorMes from "./components/TransmisionesPorMes.jsx";
 
 export default function App() {
-  // Al reservar, cambia refreshKey y la lista mensual se vuelve a cargar
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [vista, setVista] = useState("calendario"); // "calendario" | "programar"
+  const [fechaElegida, setFechaElegida] = useState(null);
+
+  // Desde el calendario: abrir "Programar" con el día pulsado
+  const irAProgramar = (fecha) => {
+    setFechaElegida(fecha);
+    setVista("programar");
+  };
+
+  const cambiarVista = (v) => {
+    if (v === "programar") setFechaElegida(null);
+    setVista(v);
+  };
 
   return (
-    <main className="container">
-      <h1>Transmisiones en vivo</h1>
-      <ProgramarTransmision onCreated={() => setRefreshKey((k) => k + 1)} />
-      <TransmisionesPorMes refreshKey={refreshKey} />
-    </main>
+    <div className="app">
+      <Sidebar vista={vista} onCambiar={cambiarVista} />
+
+      <main className="contenido">
+        {vista === "calendario" ? (
+          <Calendario mostrarListado onElegirDia={irAProgramar} />
+        ) : (
+          <ProgramarTransmision key={fechaElegida || "ninguna"} fechaInicial={fechaElegida} />
+        )}
+      </main>
+    </div>
   );
 }

@@ -44,12 +44,13 @@ export function SelectorFecha({ value, onChange, min }) {
     </div>
   );
 }
-
 /* Selector de mes y año. value con formato "YYYY-MM" */
 export function SelectorMes({ value, onChange }) {
   const [anio, mes] = value.split("-").map(Number);
   const actual = new Date().getFullYear();
-  const anios = [actual - 1, actual, actual + 1, actual + 2];
+  const desde = Math.min(actual - 1, anio);
+  const hasta = Math.max(actual + 2, anio);
+  const anios = Array.from({ length: hasta - desde + 1 }, (_, i) => desde + i);
 
   return (
     <div className="selector-fecha">
