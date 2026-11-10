@@ -42,3 +42,11 @@ export const getTarifas = async (tipo) => {
     throw new Error(msg(e));
   }
 };
+export const getPagos = async (filtro) => {
+  try {
+    const r = await axios.get(`${API_URL}/pagos`, { params: { filtro } });
+    return r.data.data;
+  } catch (e) {
+    throw new Error(msg(e));
+  }
+};
