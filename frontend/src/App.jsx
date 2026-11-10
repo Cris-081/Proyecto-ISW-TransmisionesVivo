@@ -3,9 +3,10 @@ import Sidebar from "./components/Sidebar.jsx";
 import Calendario from "./components/Calendario.jsx";
 import ProgramarTransmision from "./components/ProgramarTransmision.jsx";
 import PanelGeneral from "./components/PanelGeneral.jsx";
+import CoberturaEnVivo from "./components/CoberturaEnVivo.jsx";
 
 export default function App() {
-  const [vista, setVista] = useState("panel"); // "panel" | "calendario" | "programar"
+  const [vista, setVista] = useState("panel"); // "panel" | "cobertura" | "calendario" | "programar"
   const [fechaElegida, setFechaElegida] = useState(null);
 
   // Desde el calendario: abrir "Programar" con el día pulsado
@@ -25,6 +26,8 @@ export default function App() {
 
       <main className="contenido">
         {vista === "panel" && <PanelGeneral />}
+
+        {vista === "cobertura" && <CoberturaEnVivo />}
 
         {vista === "calendario" && (
           <Calendario mostrarListado onElegirDia={irAProgramar} />

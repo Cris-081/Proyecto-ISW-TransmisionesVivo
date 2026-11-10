@@ -16,4 +16,18 @@ model transmisiones {
   horaInicio String   @db.VarChar(5)
   horaFin    String   @db.VarChar(5)
   created_at DateTime @default(now()) @db.Timestamp(6)
+    trabajadores trabajadores[]
+  equipos      equipos[]
+}
+model trabajadores {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(100)
+  cargo         String          @db.VarChar(50)
+  transmisiones transmisiones[]
+}
+
+model equipos {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(100)
+  transmisiones transmisiones[]
 }

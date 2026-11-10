@@ -8,6 +8,14 @@ const IconoPanel = () => (
   </svg>
 );
 
+const IconoVivo = () => (
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+       strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" />
+  </svg>
+);
+
 const IconoCalendario = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -26,6 +34,7 @@ const IconoMas = () => (
 
 const ITEMS = [
   { id: "panel", etiqueta: "Panel general", Icono: IconoPanel },
+  { id: "cobertura", etiqueta: "Cobertura en vivo", Icono: IconoVivo },
   { id: "calendario", etiqueta: "Calendario", Icono: IconoCalendario },
   { id: "programar", etiqueta: "Programar transmisión", Icono: IconoMas },
 ];

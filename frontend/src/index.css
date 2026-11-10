@@ -220,3 +220,4 @@ th { color: var(--apagado); font-weight: 600; font-size: .75rem; text-transform:
 .pg-tarjetas article { background: #2b2b2b; border-radius: 24px; padding: 24px; text-align: center; }
 .pg-tarjetas h3 { font-size: 0.85rem; margin: 0 0 12px; }
 .pg-tarjetas p { font-size: 1.8rem; font-weight: 600; margin: 0; }
+.pg-tres { grid-template-columns: repeat(3, 1fr); }
