@@ -4,6 +4,7 @@ import Calendario from "./components/Calendario.jsx";
 import ProgramarTransmision from "./components/ProgramarTransmision.jsx";
 import PanelGeneral from "./components/PanelGeneral.jsx";
 import CoberturaEnVivo from "./components/CoberturaEnVivo.jsx";
+import ClientesPrecios from "./components/ClientesPrecios.jsx";
 
 export default function App() {
   const [vista, setVista] = useState("panel"); // "panel" | "cobertura" | "calendario" | "programar"
@@ -28,6 +29,8 @@ export default function App() {
         {vista === "panel" && <PanelGeneral />}
 
         {vista === "cobertura" && <CoberturaEnVivo />}
+
+                {vista === "clientes" && <ClientesPrecios />}
 
         {vista === "calendario" && (
           <Calendario mostrarListado onElegirDia={irAProgramar} />

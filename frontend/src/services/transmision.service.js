@@ -34,3 +34,11 @@ export const getTransmisionesPorMes = async (anio, mes) => {
     throw new Error(msg(e));
   }
 };
+export const getTarifas = async (tipo) => {
+  try {
+    const r = await axios.get(`${API_URL}/tarifas`, { params: { tipo } });
+    return r.data.data;
+  } catch (e) {
+    throw new Error(msg(e));
+  }
+};

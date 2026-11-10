@@ -32,10 +32,22 @@ const IconoMas = () => (
   </svg>
 );
 
+const IconoClientes = () => (
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+       strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="9" cy="8" r="3.5" />
+    <path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6" />
+    <circle cx="17" cy="9" r="2.5" />
+    <path d="M17 14c2.5 0 4.5 1.8 4.5 4.5" />
+  </svg>
+);
+
+
 const ITEMS = [
   { id: "panel", etiqueta: "Panel general", Icono: IconoPanel },
   { id: "cobertura", etiqueta: "Cobertura en vivo", Icono: IconoVivo },
   { id: "calendario", etiqueta: "Calendario", Icono: IconoCalendario },
+  { id: "clientes", etiqueta: "Clientes y precios", Icono: IconoClientes },
   { id: "programar", etiqueta: "Programar transmisión", Icono: IconoMas },
 ];
 

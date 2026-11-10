@@ -31,3 +31,11 @@ model equipos {
   nombre        String          @db.VarChar(100)
   transmisiones transmisiones[]
 }
+
+model tarifas {
+  id          Int    @id @default(autoincrement())
+  servicio    String @db.VarChar(100)
+  tipoCliente String @db.VarChar(20)
+  precio      Int
+  condicion   String @db.VarChar(100)
+}
