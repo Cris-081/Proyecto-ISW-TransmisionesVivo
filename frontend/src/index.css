@@ -213,3 +213,10 @@ th { color: var(--apagado); font-weight: 600; font-size: .75rem; text-transform:
   }
   .dia-semana { font-size: .65rem; }
 }
+
+.pg-encabezado { display: flex; justify-content: space-between; align-items: center; }
+.pg-envivo { background: #e5202e; border-radius: 999px; padding: 4px 14px; font-weight: 700; }
+.pg-tarjetas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 720px; }
+.pg-tarjetas article { background: #2b2b2b; border-radius: 24px; padding: 24px; text-align: center; }
+.pg-tarjetas h3 { font-size: 0.85rem; margin: 0 0 12px; }
+.pg-tarjetas p { font-size: 1.8rem; font-weight: 600; margin: 0; }

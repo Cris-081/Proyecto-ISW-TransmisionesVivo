@@ -2,9 +2,10 @@ import { useState } from "react";
 import Sidebar from "./components/Sidebar.jsx";
 import Calendario from "./components/Calendario.jsx";
 import ProgramarTransmision from "./components/ProgramarTransmision.jsx";
+import PanelGeneral from "./components/PanelGeneral.jsx";
 
 export default function App() {
-  const [vista, setVista] = useState("calendario"); // "calendario" | "programar"
+  const [vista, setVista] = useState("panel"); // "panel" | "calendario" | "programar"
   const [fechaElegida, setFechaElegida] = useState(null);
 
   // Desde el calendario: abrir "Programar" con el día pulsado
@@ -23,9 +24,13 @@ export default function App() {
       <Sidebar vista={vista} onCambiar={cambiarVista} />
 
       <main className="contenido">
-        {vista === "calendario" ? (
+        {vista === "panel" && <PanelGeneral />}
+
+        {vista === "calendario" && (
           <Calendario mostrarListado onElegirDia={irAProgramar} />
-        ) : (
+        )}
+
+        {vista === "programar" && (
           <ProgramarTransmision key={fechaElegida || "ninguna"} fechaInicial={fechaElegida} />
         )}
       </main>
