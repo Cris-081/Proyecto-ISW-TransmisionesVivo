@@ -15,3 +15,110 @@ body,
 #root {
   min-height: 100vh;
 }
+
+/* ---------- Menú lateral: opción activa en rojo ---------- */
+nav a[aria-current="page"],
+aside a[aria-current="page"],
+nav a.active,
+aside a.active {
+  background: #e3202c !important;
+  color: #fff !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+}
+
+nav a[aria-current="page"]::before,
+aside a[aria-current="page"]::before,
+nav a.active::before,
+aside a.active::before {
+  display: none !important; /* quita la barrita celeste de la izquierda */
+}
+
+nav a[aria-current="page"] svg,
+aside a[aria-current="page"] svg,
+nav a.active svg,
+aside a.active svg {
+  color: #fff !important;
+  stroke: #fff;
+}
+
+/* ---------- Menú lateral: opción activa en rojo ---------- */
+nav a[aria-current="page"],
+aside a[aria-current="page"],
+nav a.active,
+aside a.active {
+  background: #e3202c !important;
+  color: #fff !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+}
+
+nav a[aria-current="page"]::before,
+aside a[aria-current="page"]::before,
+nav a.active::before,
+aside a.active::before {
+  display: none !important; /* quita la barrita celeste de la izquierda */
+}
+
+nav a[aria-current="page"] svg,
+aside a[aria-current="page"] svg,
+nav a.active svg,
+aside a.active svg {
+  color: #fff !important;
+  stroke: #fff;
+}
+
+/* ---------- Menú lateral: opción activa en rojo ---------- */
+nav a[aria-current="page"],
+aside a[aria-current="page"],
+nav a.active,
+aside a.active {
+  background: #e3202c !important;
+  color: #fff !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+}
+
+nav a[aria-current="page"]::before,
+aside a[aria-current="page"]::before,
+nav a.active::before,
+aside a.active::before {
+  display: none !important; /* quita la barrita celeste de la izquierda */
+}
+
+nav a[aria-current="page"] svg,
+aside a[aria-current="page"] svg,
+nav a.active svg,
+aside a.active svg {
+  color: #fff !important;
+  stroke: #fff;
+}
+
+/* ---------- Login y formularios: acento rojo ---------- */
+form button[type="submit"] {
+  background: #e3202c !important;
+  border-color: #e3202c !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+}
+
+form button[type="submit"]:hover {
+  filter: brightness(1.12);
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: #e3202c !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(227, 32, 44, 0.35) !important;
+}
+
+form button[type="submit"]:focus-visible {
+  outline: 2px solid #fff !important;
+  outline-offset: 2px;
+}
