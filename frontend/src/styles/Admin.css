@@ -1,0 +1,339 @@
+/* Estilos de las pantallas de administracion (usuarios, equipos e inventario de kits).
+   Los selectores llevan un ancestro para ganar en especificidad sin importar el orden de carga. */
+
+.layout-main .alert-error {
+  margin: 20px 0 0;
+  padding: 12px 14px;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  font-size: 0.88rem;
+}
+
+/* ----- Botones pequenos ----- */
+.layout-main .btn-small {
+  min-height: 36px;
+  padding: 7px 12px;
+  color: #d4d4d8;
+  background: transparent;
+  border: 1px solid #35373b;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.layout-main .btn-small:hover:not(:disabled) {
+  color: #fff;
+  border-color: #60636a;
+  background: #191a1d;
+}
+
+.layout-main .btn-small.primary {
+  color: #fff;
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.layout-main .btn-small.primary:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.layout-main .btn-small.danger {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.layout-main .btn-small.danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: #f87171;
+}
+
+.layout-main .btn-small:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.layout-main .btn-small:focus-visible {
+  outline: 2px solid #64a5ff;
+  outline-offset: 2px;
+}
+
+.layout-main .row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* ----- Campos (select y textarea con el mismo aspecto que los input) ----- */
+.layout-main .field select,
+.layout-main .item-row select,
+.layout-main .item-row input,
+.layout-main .inline-form input,
+.layout-main .assign-row select {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  color: #fff;
+  background: #1a1a1a;
+  border: 1px solid #383838;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.layout-main .field select {
+  min-height: 48px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+}
+
+.layout-main .field select:focus,
+.layout-main .item-row select:focus,
+.layout-main .item-row input:focus,
+.layout-main .inline-form input:focus,
+.layout-main .assign-row select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+.layout-main .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+/* ----- Usuarios: funciones y registro ----- */
+.layout-main .admin-panel .admin-users-table {
+  min-width: 860px;
+}
+
+.layout-main .funciones-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.layout-main .check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #d4d4d8;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.layout-main .check input {
+  width: 15px;
+  height: 15px;
+  accent-color: #2563eb;
+}
+
+.layout-main .admin-details {
+  margin-top: 24px;
+  border: 1px solid #292b30;
+  border-radius: 10px;
+  background: #111;
+}
+
+.layout-main .admin-details summary {
+  padding: 14px 16px;
+  color: #e8e9eb;
+  font-size: 0.95rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.layout-main .admin-form {
+  padding: 4px 16px 20px;
+}
+
+/* ----- Equipos ----- */
+.layout-main .inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.layout-main .inline-form input {
+  flex: 1 1 200px;
+  width: auto;
+}
+
+/* ----- Inventario de kits ----- */
+.layout-main .kit-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 28px 0 20px;
+}
+
+.layout-main .filter-group {
+  display: flex;
+  gap: 8px;
+}
+
+.layout-main .kit-form {
+  margin-bottom: 28px;
+  padding: 22px;
+  border: 1px solid #292b30;
+  border-radius: 10px;
+  background: #111;
+}
+
+.layout-main .kit-form h2 {
+  margin-bottom: 18px;
+  color: #e8e9eb;
+  font-size: 1.1rem;
+}
+
+.layout-main .kit-form-label {
+  margin: 20px 0 10px;
+  color: #a3a3a3;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.layout-main .item-rows {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.layout-main .item-row {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1.4fr) minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.layout-main .form-buttons {
+  margin-top: 22px;
+}
+
+.layout-main .kit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+  list-style: none;
+}
+
+.layout-main .kit-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #292b30;
+  border-radius: 10px;
+  background: #111;
+}
+
+.layout-main .kit-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.layout-main .kit-card-head h3 {
+  color: #f5f5f5;
+  font-size: 1.02rem;
+  overflow-wrap: anywhere;
+}
+
+.layout-main .badge {
+  flex: none;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.layout-main .badge.disponible {
+  color: #a7e3bd;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.layout-main .badge.ocupado {
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.layout-main .kit-items {
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  color: #e5e5e7;
+  font-size: 0.88rem;
+}
+
+.layout-main .kit-items small {
+  color: #8b8e95;
+}
+
+.layout-main .item-tipo {
+  display: inline-block;
+  min-width: 82px;
+  margin-right: 8px;
+  color: #64a5ff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.layout-main .kit-team {
+  color: #c8c9cc;
+  font-size: 0.88rem;
+}
+
+.layout-main .kit-actions {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #202226;
+}
+
+.layout-main .assign-row {
+  display: flex;
+  gap: 8px;
+}
+
+.layout-main .kit-empty {
+  margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+  .layout-main .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .layout-main .item-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .layout-main .item-row select,
+  .layout-main .item-row input:nth-of-type(1),
+  .layout-main .item-row input:nth-of-type(2) {
+    grid-column: 1 / -1;
+  }
+}
+
+.layout-main .alert-info {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  color: #a7e3bd;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  border-radius: 8px;
+  font-size: 0.88rem;
+}

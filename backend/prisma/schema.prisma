@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  coordinador
+  operador
+}
+
+enum Estado {
+  Activo
+  Inactivo
+  Bloqueado
+}
+
+enum EstadoKit {
+  Disponible
+  Ocupado
+}
+
+enum TipoItem {
+  camara
+  microfono
+  accesorio
+}
+
+model User {
+  id               Int      @id @default(autoincrement())
+  run              String   @unique @db.VarChar(12)
+  nombre           String   @db.VarChar(100)
+  email            String   @unique @db.VarChar(255)
+  password         String   @db.VarChar(255)
+  role             Role     @default(operador)
+  funciones        String[] @default([])
+  estado           Estado   @default(Activo)
+  numeroTelefonico String?  @db.VarChar(15)
+  teamId           Int?     @map("team_id")
+  team             Team?    @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Team {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  description String?
+  createdAt   DateTime @default(now())
+  members     User[]
+  kits        Kit[]
+
+  @@map("teams")
+}
+
+// Kit de grabacion: conjunto de equipos (camara, microfono y accesorios) que se asigna a un equipo de trabajo.
+// Regla: estado = Ocupado  <=>  teamId distinto de null.
+model Kit {
+  id          Int       @id @default(autoincrement())
+  nombre      String    @unique @db.VarChar(100)
+  descripcion String?
+  estado      EstadoKit @default(Disponible)
+  teamId      Int?      @map("team_id")
+  team        Team?     @relation(fields: [teamId], references: [id], onDelete: Restrict)
+  asignadoAt  DateTime? @map("asignado_at")
+  items       KitItem[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("kits")
+}
+
+model KitItem {
+  id          Int      @id @default(autoincrement())
+  kitId       Int      @map("kit_id")
+  kit         Kit      @relation(fields: [kitId], references: [id], onDelete: Cascade)
+  tipo        TipoItem
+  nombre      String   @db.VarChar(100)
+  numeroSerie String?  @map("numero_serie") @db.VarChar(100)
+
+  @@map("kit_items")
+}
+
+// Cobertura de transmisiones en vivo (modelos de Isidora)
+model transmisiones {
+  id           Int            @id(map: "PK_6df8c2fe648b87cf37994d82983") @default(autoincrement())
+  tema         String         @db.VarChar(150)
+  fecha        DateTime       @db.Date
+  horaInicio   String         @db.VarChar(5)
+  horaFin      String         @db.VarChar(5)
+  created_at   DateTime       @default(now()) @db.Timestamp(6)
+  trabajadores trabajadores[]
+  equipos      equipos[]
+}
+
+model trabajadores {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(100)
+  cargo         String          @db.VarChar(50)
+  transmisiones transmisiones[]
+}
+
+model equipos {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(100)
+  transmisiones transmisiones[]
+}
+
+model tarifas {
+  id          Int    @id @default(autoincrement())
+  servicio    String @db.VarChar(100)
+  tipoCliente String @db.VarChar(20)
+  precio      Int
+  condicion   String @db.VarChar(100)
+}
+
+model pagos {
+  id          Int    @id @default(autoincrement())
+  cliente     String @db.VarChar(100)
+  transmision String @db.VarChar(150)
+  total       Int
+  montoPagado Int    @default(0)
+}
