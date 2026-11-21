@@ -3,6 +3,7 @@ import { api } from "./api.js";
 // Usuarios
 export const getUsers = async () => (await api.get("/admin/users")).data;
 export const createUser = async (user) => (await api.post("/admin/users", user)).data;
+export const updateUser = async (userId, data) => (await api.put(`/admin/users/${userId}`, data)).data;
 export const updateUserRole = async (userId, role) =>
   (await api.patch(`/admin/users/${userId}/role`, { role })).data;
 export const updateUserFunciones = async (userId, funciones) =>

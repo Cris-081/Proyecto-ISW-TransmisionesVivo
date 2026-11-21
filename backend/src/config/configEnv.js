@@ -25,12 +25,8 @@ if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET es obligatorio en produccion');
 }
 export const JWT_SECRET = process.env.JWT_SECRET || 'secreto_seguro';
+// funciona pero no manda nada 
+export const EMAIL_USER = process.env.EMAIL_USER;
 
-// Correo (nodemailer). Si MAIL_HOST no esta definido la app funciona igual, pero no envia correos
-export const MAIL_HOST = process.env.MAIL_HOST;
-export const MAIL_PORT = Number(process.env.MAIL_PORT) || 587;
-export const MAIL_SECURE = process.env.MAIL_SECURE === 'true';
-export const MAIL_USER = process.env.MAIL_USER;
-export const MAIL_PASS = process.env.MAIL_PASS;
-export const MAIL_FROM = process.env.MAIL_FROM || process.env.MAIL_USER;
+export const EMAIL_PASS = process.env.EMAIL_PASS?.replace(/\s+/g, '');
 export const APP_URL = process.env.APP_URL || 'http://localhost:5173';

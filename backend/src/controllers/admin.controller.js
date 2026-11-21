@@ -3,6 +3,7 @@ import { handleSuccess, handleErrorClient } from "../handlers/responseHandlers.j
 import { handleControllerError } from "../handlers/errorHandler.js";
 import {
   createUserValidation,
+  updateUserValidation,
   updateFuncionesValidation,
   teamValidation,
   createTeamValidation,
@@ -26,6 +27,17 @@ export async function createUser(req, res) {
     if (error) return handleErrorClient(res, 400, error.details[0].message);
     const user = await adminService.createUserService(value);
     return handleSuccess(res, 201, "Usuario creado con exito", omitPassword(user));
+  } catch (err) {
+    return handleControllerError(res, err);
+  }
+}
+
+export async function updateUser(req, res) {
+  try {
+    const { error, value } = validate(updateUserValidation, req.body);
+    if (error) return handleErrorClient(res, 400, error.details[0].message);
+    const updated = await adminService.updateUserService(req.params.id, value, req.user.id);
+    return handleSuccess(res, 200, "Usuario actualizado con exito", omitPassword(updated));
   } catch (err) {
     return handleControllerError(res, err);
   }

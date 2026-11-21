@@ -1,40 +1,32 @@
 import nodemailer from "nodemailer";
-import {
-  MAIL_HOST,
-  MAIL_PORT,
-  MAIL_SECURE,
-  MAIL_USER,
-  MAIL_PASS,
-  MAIL_FROM,
-  APP_URL,
-} from "../config/configEnv.js";
+import { EMAIL_USER, EMAIL_PASS, APP_URL } from "../config/configEnv.js";
 
-export const correoConfigurado = () => Boolean(MAIL_HOST);
+export const correoConfigurado = () => Boolean(EMAIL_USER && EMAIL_PASS);
+
+export const opcionesTransporte = () => ({
+  service: "gmail",
+  auth: { user: EMAIL_USER, pass: EMAIL_PASS },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000,
+});
 
 let transporter = null;
 
-// solo se hace 1 vez cuando se necesite
+// solo se hace 1 vez si se necesita
 const getTransporter = () => {
   if (!transporter) {
-    transporter = nodemailer.createTransport({
-      host: MAIL_HOST,
-      port: MAIL_PORT,
-      secure: MAIL_SECURE,
-      auth: MAIL_USER && MAIL_PASS ? { user: MAIL_USER, pass: MAIL_PASS } : undefined,
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000,
-    });
+    transporter = nodemailer.createTransport(opcionesTransporte());
   }
   return transporter;
 };
 
-// dw
+
 const esc = (valor) =>
   String(valor ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 export const armarCorreoEquipo = ({ miembro, team, companeros }) => {
-  // Lo que llega al mail
+  // el correo da esto
   const subject = `Fuiste seleccionado para el equipo "${team.name}"`.replace(/\s+/g, " ");
   const otros = companeros.filter((c) => c.id !== miembro.id).map((c) => c.nombre);
 
@@ -61,13 +53,13 @@ export const armarCorreoEquipo = ({ miembro, team, companeros }) => {
 };
 
 
-// Avisa por correo al que se selecciona y no debe evitar crear el equipo si falla
+// Avisa por correo al que se selecciona, no da problemas si no funciona crear el equipo o deberia
 export async function notificarEquipoAsignado(team, miembros) {
   const resultado = { configurado: correoConfigurado(), enviados: 0, fallidos: [] };
   if (!miembros.length) return resultado;
 
   if (!resultado.configurado) {
-    console.warn(`[correo] MAIL_HOST no esta configurado: se omiten ${miembros.length} correo(s) del equipo "${team.name}".`);
+    console.warn(`[correo] el correo no esta configurado (falta EMAIL_USER o EMAIL_PASS en el .env): se omiten ${miembros.length} correo(s) del equipo "${team.name}".`);
     return resultado;
   }
 
@@ -76,7 +68,7 @@ export async function notificarEquipoAsignado(team, miembros) {
   const envios = await Promise.allSettled(
     miembros.map((miembro) =>
       smtp.sendMail({
-        from: MAIL_FROM,
+        from: `"EnVivo" <${EMAIL_USER}>`,
         to: miembro.email,
         ...armarCorreoEquipo({ miembro, team, companeros: miembros }),
       })

@@ -38,6 +38,15 @@ const ICONS = {
       <path d="M18 14.3c2.2.7 3.5 2.6 3.5 5.7" />
     </Icon>
   ),
+  team: (
+    <Icon>
+      <circle cx="12" cy="7" r="3" />
+      <circle cx="5.5" cy="10" r="2.2" />
+      <circle cx="18.5" cy="10" r="2.2" />
+      <path d="M6.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5" />
+      <path d="M1.5 19c0-2.4 1.6-4 4-4M22.5 19c0-2.4-1.6-4-4-4" />
+    </Icon>
+  ),
   camera: (
     <Icon>
       <rect x="2" y="6" width="13" height="12" rx="2" />
@@ -116,7 +125,8 @@ const NAV_GROUPS = [
     title: "Administracion",
     roles: ["admin"],
     items: [
-      { to: "/admin", label: "Usuarios y equipos", icon: "users" },
+      { to: "/admin/usuarios", label: "Usuarios", icon: "users" },
+      { to: "/admin/equipos", label: "Equipos", icon: "team" },
       { to: "/admin/inventario", label: "Inventario de kits", icon: "camera" },
     ],
   },

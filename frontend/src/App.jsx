@@ -3,7 +3,8 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import MainLayout from "./components/MainLayout.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
-import AdminPage from "./pages/AdminPage.jsx";
+import UsuariosPage from "./pages/UsuariosPage.jsx";
+import EquiposPage from "./pages/EquiposPage.jsx";
 import InventarioPage from "./pages/InventarioPage.jsx";
 import CoberturaLayout from "./pages/CoberturaLayout.jsx";
 import CalendarioPage from "./pages/CalendarioPage.jsx";
@@ -28,11 +29,20 @@ export default function App() {
         }
       >
         <Route path="/" element={<HomePage />} />
+        <Route path="/admin" element={<Navigate to="/admin/usuarios" replace />} />
         <Route
-          path="/admin"
+          path="/admin/usuarios"
           element={
             <ProtectedRoute roles={["admin"]}>
-              <AdminPage />
+              <UsuariosPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/equipos"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <EquiposPage />
             </ProtectedRoute>
           }
         />

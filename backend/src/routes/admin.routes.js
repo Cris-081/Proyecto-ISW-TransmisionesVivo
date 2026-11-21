@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getUsers,
   createUser,
+  updateUser,
   updateUserRole,
   updateUserFunciones,
   createTeam,
@@ -21,6 +22,7 @@ router.use(authenticate, authorizeRoles("admin"));
 // Usuarios
 router.get("/users", getUsers);
 router.post("/users", createUser);
+router.put("/users/:id", updateUser);
 router.patch("/users/:id/role", updateUserRole);
 router.patch("/users/:id/funciones", updateUserFunciones);
 

@@ -67,5 +67,4 @@ export const authorizeSelfOrRoles = (paramName = "id", ...roles) => (req, res, n
   return handleErrorClient(res, 403, "No tienes permisos para acceder a este sitio");
 };
 
-// atajo para las rutas de gestion: solo admin y coordinador
 export const soloGestion = authorizeRoles("admin", "coordinador");

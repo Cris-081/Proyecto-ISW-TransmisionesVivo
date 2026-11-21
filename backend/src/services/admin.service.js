@@ -32,6 +32,49 @@ export const createUserService = async (data) => {
   });
 };
 
+// El admin modifica todos los datos de un usuario
+export const updateUserService = async (userId, data, actorId) => {
+  const id = parseId(userId, "ID de usuario");
+  const user = await prisma.user.findUnique({ where: { id }, select: { id: true } });
+  if (!user) throw new HttpError(404, "Usuario no encontrado");
+
+  const { password, numeroTelefonico, ...rest } = data;
+
+  // evita problema con el admin 
+  if (id === actorId) {
+    if (rest.role && rest.role !== "admin") throw new HttpError(400, "No puedes quitarte el rol de administrador a ti mismo.");
+    if (rest.estado && rest.estado !== "Activo") throw new HttpError(400, "No puedes desactivar tu propia cuenta.");
+  }
+
+  return await prisma.user.update({
+    where: { id },
+    data: {
+      ...rest,
+      numeroTelefonico: numeroTelefonico || null,
+      ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
+    },
+    include: { team: true },
+  });
+};
+
+// El usuario solo puede cambiar su correo y su telefono 
+export const updateOwnProfileService = async (userId, { email, numeroTelefonico }) => {
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { email, numeroTelefonico: numeroTelefonico || null },
+    select: {
+      id: true,
+      nombre: true,
+      role: true,
+      email: true,
+      run: true,
+      numeroTelefonico: true,
+      estado: true,
+      funciones: true,
+    },
+  });
+};
+
 export const updateUserRoleService = async (userId, role) => {
   const id = parseId(userId, "ID de usuario");
   if (!ROLES.includes(role)) throw new HttpError(400, `Rol invalido. Valores permitidos: ${ROLES.join(", ")}`);
@@ -60,7 +103,7 @@ export const createTeamService = async (name, description, memberIds = []) => {
     if (faltan.length) throw new HttpError(404, `Usuarios no encontrados: ${faltan.join(", ")}`);
   }
 
-  // el equipo y la asignacion de sus integrantes se guardan en una sola operacion
+  // el equipo y la asignacion de sus integrantes se guardan 
   const team = await prisma.team.create({
     data: {
       name,

@@ -34,9 +34,18 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
+  // actualiza los datos del usuario guardados en el navegador (por ejemplo despues de editar su perfil)
+  const updateUser = useCallback((cambios) => {
+    setUser((actual) => {
+      const nuevo = { ...actual, ...cambios };
+      saveSession(getToken(), nuevo);
+      return nuevo;
+    });
+  }, []);
+
   const value = useMemo(
-    () => ({ user, isAuthenticated: !!user, login, logout }),
-    [user, login, logout]
+    () => ({ user, isAuthenticated: !!user, login, logout, updateUser }),
+    [user, login, logout, updateUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

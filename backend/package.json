@@ -12,7 +12,8 @@
     "prisma:studio": "prisma studio",
     "seed:cobertura": "node src/seed.js",
     "seed:tarifas": "node src/seedTarifas.js",
-    "seed:pagos": "node src/seedPagos.js"
+    "seed:pagos": "node src/seedPagos.js",
+    "correo:probar": "node src/probarCorreo.js"
   },
   "keywords": [],
   "author": "",

@@ -54,3 +54,27 @@ export const createTeamValidation = teamValidation.keys({
       "number.base": "Los integrantes indicados no son validos.",
     }),
 });
+
+// El admin puede modificar todos los datos de un usuario
+export const updateUserValidation = Joi.object({
+  nombre: Joi.string().trim().max(100).required(),
+  email: Joi.string().email().trim().lowercase().max(255).required(),
+  run: Joi.string().trim().max(12).required(),
+  numeroTelefonico: Joi.string().trim().max(15).allow("", null).optional(),
+  role: Joi.string().valid("admin", "coordinador", "operador").optional(),
+  estado: Joi.string().valid("Activo", "Inactivo", "Bloqueado").optional(),
+  funciones: Joi.array().items(Joi.string().valid(...FUNCIONES_PERMITIDAS)).unique().optional(),
+  password: Joi.string().min(6).allow("", null).optional(),
+});
+
+// Un usuario normal solo puede cambiar su correo y su telefono
+export const updateProfileValidation = Joi.object({
+  email: Joi.string().email().trim().lowercase().max(255).required().messages({
+    "string.empty": "El correo es obligatorio.",
+    "string.email": "El formato del correo no es valido.",
+    "any.required": "El correo es obligatorio.",
+  }),
+  numeroTelefonico: Joi.string().trim().max(15).allow("", null).optional().messages({
+    "string.max": "El telefono no puede superar los 15 caracteres.",
+  }),
+});
