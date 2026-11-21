@@ -2,104 +2,37 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { labelRol } from "../helpers/labels.js";
 import { ROLES_GESTION } from "../helpers/roles.js";
+import {
+  FiHome,
+  FiUser,
+  FiUsers,
+  FiVideo,
+  FiGrid,
+  FiRadio,
+  FiCalendar,
+  FiPlusCircle,
+  FiBriefcase,
+  FiCreditCard,
+  FiLogOut,
+} from "react-icons/fi";
 import "../styles/Sidebar.css";
 
 
-function Icon({ children }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="18"
-      height="18"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {children}
-    </svg>
-  );
-}
+
+const P = { size: 18, "aria-hidden": true };
 
 const ICONS = {
-  home: (
-    <Icon>
-      <path d="M3 11l9-8 9 8" />
-      <path d="M5 10v10h14V10" />
-    </Icon>
-  ),
-  users: (
-    <Icon>
-      <circle cx="9" cy="8" r="3.5" />
-      <path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" />
-      <path d="M16 4.6a3.5 3.5 0 010 6.8" />
-      <path d="M18 14.3c2.2.7 3.5 2.6 3.5 5.7" />
-    </Icon>
-  ),
-  team: (
-    <Icon>
-      <circle cx="12" cy="7" r="3" />
-      <circle cx="5.5" cy="10" r="2.2" />
-      <circle cx="18.5" cy="10" r="2.2" />
-      <path d="M6.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5" />
-      <path d="M1.5 19c0-2.4 1.6-4 4-4M22.5 19c0-2.4-1.6-4-4-4" />
-    </Icon>
-  ),
-  camera: (
-    <Icon>
-      <rect x="2" y="6" width="13" height="12" rx="2" />
-      <path d="M15 10l7-4v12l-7-4" />
-    </Icon>
-  ),
-  panel: (
-    <Icon>
-      <rect x="3" y="3" width="7" height="7" rx="2" />
-      <rect x="14" y="3" width="7" height="7" rx="2" />
-      <rect x="3" y="14" width="7" height="7" rx="2" />
-      <rect x="14" y="14" width="7" height="7" rx="2" />
-    </Icon>
-  ),
-  vivo: (
-    <Icon>
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" />
-    </Icon>
-  ),
-  calendar: (
-    <Icon>
-      <rect x="3" y="4" width="18" height="17" rx="3" />
-      <path d="M3 9h18M8 2v4M16 2v4" />
-    </Icon>
-  ),
-  plus: (
-    <Icon>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 8v8M8 12h8" />
-    </Icon>
-  ),
-  clients: (
-    <Icon>
-      <circle cx="9" cy="8" r="3.5" />
-      <path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6" />
-      <circle cx="17" cy="9" r="2.5" />
-      <path d="M17 14c2.5 0 4.5 1.8 4.5 4.5" />
-    </Icon>
-  ),
-  pagos: (
-    <Icon>
-      <rect x="2.5" y="5" width="19" height="14" rx="3" />
-      <path d="M2.5 10h19M6.5 15h4" />
-    </Icon>
-  ),
-  logout: (
-    <Icon>
-      <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
-      <path d="M16 17l5-5-5-5" />
-      <path d="M21 12H9" />
-    </Icon>
-  ),
+  home: <FiHome {...P} />,
+  users: <FiUser {...P} />,
+  team: <FiUsers {...P} />,
+  camera: <FiVideo {...P} />,
+  panel: <FiGrid {...P} />,
+  vivo: <FiRadio {...P} />,
+  calendar: <FiCalendar {...P} />,
+  plus: <FiPlusCircle {...P} />,
+  clients: <FiBriefcase {...P} />,
+  pagos: <FiCreditCard {...P} />,
+  logout: <FiLogOut {...P} />,
 };
 
 /* Menu
